@@ -30,11 +30,20 @@ export default function PaginaPrincipalCametaOn() {
       try {
         const res = await fetch("/api/lojas");
         const data = await res.json();
-        setLojas(data);
+
+        // ✅ Garante que só define lojas se for um array
+        if (Array.isArray(data)) {
+          setLojas(data);
+        } else {
+          console.error("Resposta inesperada da API:", data);
+          setLojas([]);
+        }
       } catch (erro) {
         console.error("Erro ao carregar lojas:", erro);
+        setLojas([]); // fallback seguro
       }
     }
+
     carregarLojas();
   }, []);
 
@@ -47,7 +56,9 @@ export default function PaginaPrincipalCametaOn() {
   });
 
   const quantidadeVisivel = 9;
-  const lojasExibidas = mostrarTodos ? lojasFiltradas : lojasFiltradas.slice(0, quantidadeVisivel);
+  const lojasExibidas = mostrarTodos
+    ? lojasFiltradas
+    : lojasFiltradas.slice(0, quantidadeVisivel);
 
   return (
     <main>
@@ -66,7 +77,7 @@ export default function PaginaPrincipalCametaOn() {
               nome={loja.nome}
               descricao={loja.descricao}
               link={loja.link}
-              imagem={loja.imagem} // agora passamos só o nome, o CardParceiro resolve o caminho
+              imagem={loja.imagem}
               categoria={loja.categoria}
               avaliacao={4.5}
               distancia=""
@@ -79,7 +90,7 @@ export default function PaginaPrincipalCametaOn() {
         <div className="text-center mb-12">
           <button
             onClick={() => setMostrarTodos(!mostrarTodos)}
-            className="bg-blue-700 hover:bg-blue-800 font-semibold underline"
+            className="bg-blue-700 hover:bg-blue-800 font-semibold underline text-white px-4 py-2 rounded"
           >
             {mostrarTodos ? "Ver menos" : "Ver mais"}
           </button>
@@ -87,18 +98,23 @@ export default function PaginaPrincipalCametaOn() {
       )}
 
       {/* Seção de chamada para parceiros */}
-      <section className=" py-20 px-6 flex flex-col md:flex-row items-center justify-center gap-16">
+      <section className="py-20 px-6 flex flex-col md:flex-row items-center justify-center gap-16">
         <img
           src="/img/sejaMembro.PNG"
           alt="Ilustração convite para parceiros"
           className="w-64 md:w-80"
         />
         <div className="max-w-sm text-center md:text-left">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Impulsione sua marca com o CameTáOn</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Impulsione sua marca com o CameTáOn
+          </h2>
           <p className="text-gray-600 mb-6">
             Cadastre seu negócio e seja encontrado por novos clientes da sua região.
           </p>
-          <a href="/totalconect" className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold">
+          <a
+            href="/totalconect"
+            className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold"
+          >
             Saiba mais
           </a>
         </div>
