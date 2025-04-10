@@ -30,16 +30,25 @@ export default function PaginaPrincipalCametaOn() {
     async function carregarLojas() {
       try {
         const res = await fetch("/api/lojas");
+
+        // Evita erro se o status não for 200
+        if (!res.ok) {
+          console.error("Erro na resposta da API:", res.status);
+          setLojas([]);
+          return;
+        }
+
         const data = await res.json();
 
+        // Garante que só aceita array
         if (Array.isArray(data)) {
           setLojas(data);
         } else {
-          console.error("Resposta inesperada da API /api/lojas:", data);
+          console.error("Resposta inesperada:", data);
           setLojas([]);
         }
       } catch (erro) {
-        console.error("Erro ao carregar lojas:", erro);
+        console.error("Erro ao buscar lojas:", erro);
         setLojas([]);
       }
     }
