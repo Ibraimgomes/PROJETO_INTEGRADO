@@ -25,20 +25,29 @@ export default function PaginaPrincipalCametaOn() {
   const [mostrarTodos, setMostrarTodos] = useState(false);
   const [lojas, setLojas] = useState<Loja[]>([]);
 
+  // 🔄 Carrega as lojas da API com verificação extra de segurança
   useEffect(() => {
     async function carregarLojas() {
       try {
         const res = await fetch("/api/lojas");
         const data = await res.json();
-        setLojas(Array.isArray(data) ? data : []);
+
+        if (Array.isArray(data)) {
+          setLojas(data);
+        } else {
+          console.error("Resposta inesperada da API /api/lojas:", data);
+          setLojas([]);
+        }
       } catch (erro) {
         console.error("Erro ao carregar lojas:", erro);
-        setLojas([]); // Evita quebra se API falhar
+        setLojas([]);
       }
     }
+
     carregarLojas();
   }, []);
 
+  // ✅ Protege o uso do .filter() contra valores inválidos
   const lojasFiltradas = Array.isArray(lojas)
     ? lojas.filter((p) => {
         if (busca === "" || busca.toLowerCase() === "todos") return true;
@@ -50,7 +59,9 @@ export default function PaginaPrincipalCametaOn() {
     : [];
 
   const quantidadeVisivel = 9;
-  const lojasExibidas = mostrarTodos ? lojasFiltradas : lojasFiltradas.slice(0, quantidadeVisivel);
+  const lojasExibidas = mostrarTodos
+    ? lojasFiltradas
+    : lojasFiltradas.slice(0, quantidadeVisivel);
 
   return (
     <main>
@@ -82,7 +93,7 @@ export default function PaginaPrincipalCametaOn() {
         <div className="text-center mb-12">
           <button
             onClick={() => setMostrarTodos(!mostrarTodos)}
-            className="bg-blue-700 hover:bg-blue-800 font-semibold underline"
+            className="bg-blue-700 hover:bg-blue-800 font-semibold underline text-white px-4 py-2 rounded"
           >
             {mostrarTodos ? "Ver menos" : "Ver mais"}
           </button>
@@ -96,11 +107,16 @@ export default function PaginaPrincipalCametaOn() {
           className="w-64 md:w-80"
         />
         <div className="max-w-sm text-center md:text-left">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Impulsione sua marca com o CameTáOn</h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Impulsione sua marca com o CameTáOn
+          </h2>
           <p className="text-gray-600 mb-6">
             Cadastre seu negócio e seja encontrado por novos clientes da sua região.
           </p>
-          <a href="/totalconect" className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold">
+          <a
+            href="/totalconect"
+            className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold"
+          >
             Saiba mais
           </a>
         </div>
