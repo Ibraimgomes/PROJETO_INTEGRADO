@@ -1,8 +1,10 @@
+// next.config.ts
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // <- ESSA LINHA é a mágica
+    ignoreDuringBuilds: true,
   },
 }
 
-export default nextConfig
+export default nextConfig;
