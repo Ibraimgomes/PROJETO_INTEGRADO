@@ -18,7 +18,7 @@ export default function HeroCameTaOn({ aoBuscar, categorias }: HeroCameTaOnProps
   return (
     <section className="relative bg-white py-20 px-4 text-center overflow-hidden">
       <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-        Encontre negócios locais no CameTáOn
+        TESTE
       </h1>
       <p className="text-gray-600 text-lg max-w-xl mx-auto mb-8">
         Agende serviços, conheça lojas e fale direto com comércios da sua região
