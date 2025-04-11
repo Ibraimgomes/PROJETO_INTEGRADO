@@ -16,7 +16,7 @@ interface Loja {
 }
 
 const categorias = [
-  "Todos", "Beleza", "teste", "Restaurante", "Mercado", "Auto", "Tecnologia",
+  "Todos", "Beleza", "teste2", "Restaurante", "Mercado", "Auto", "Tecnologia",
   "Padaria", "Barbearia", "Moda", "Serviços", "Pet Shop", "Educação"
 ];
 
@@ -59,12 +59,12 @@ export default function PaginaPrincipalCametaOn() {
   // ✅ Protege o uso do .filter() contra valores inválidos
   const lojasFiltradas = Array.isArray(lojas)
     ? lojas.filter((p) => {
-        if (busca === "" || busca.toLowerCase() === "todos") return true;
-        return (
-          p.nome.toLowerCase().includes(busca.toLowerCase()) ||
-          p.categoria.toLowerCase().includes(busca.toLowerCase())
-        );
-      })
+      if (busca === "" || busca.toLowerCase() === "todos") return true;
+      return (
+        p.nome.toLowerCase().includes(busca.toLowerCase()) ||
+        p.categoria.toLowerCase().includes(busca.toLowerCase())
+      );
+    })
     : [];
 
   const quantidadeVisivel = 9;

@@ -34,7 +34,7 @@ const handler = NextAuth({
           email: usuario.email,
           role: usuario.role
         }
-        
+
       }
     })
   ],
@@ -51,8 +51,9 @@ const handler = NextAuth({
     }
   },
   pages: {
-    signIn: '/login-cliente', // ← ou /login para admin
+    signIn: '/login'
   },
+
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt'
