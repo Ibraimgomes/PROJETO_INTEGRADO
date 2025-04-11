@@ -16,7 +16,7 @@ interface Loja {
 }
 
 const categorias = [
-  "Todos", "Beleza", "teste2", "Restaurante", "Mercado", "Auto", "Tecnologia",
+  "Todos", "teste1", "teste2", "Restaurante", "Mercado", "Auto", "Tecnologia",
   "Padaria", "Barbearia", "Moda", "Serviços", "Pet Shop", "Educação"
 ];
 
