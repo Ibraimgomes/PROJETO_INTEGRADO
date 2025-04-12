@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import BarraNavegacao from '@/components/BarraNavegacao'
 
+const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
+
 interface Loja {
   id: number
   nome: string
@@ -31,12 +33,21 @@ export default function PaginaAdmin() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login')
-    } else if (status === 'authenticated') {
+    if (!modoVisual) {
+      if (status === 'unauthenticated') {
+        router.push('/login')
+        return
+      }
+      if (status === 'authenticated' && session?.user.role !== 'admin') {
+        router.push('/')
+        return
+      }
+    }
+
+    if (status === 'authenticated' || modoVisual) {
       carregarLojas()
     }
-  }, [status])
+  }, [status, session])
 
   async function carregarLojas() {
     try {
@@ -109,19 +120,19 @@ export default function PaginaAdmin() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-
-
       <div className="max-w-4xl mx-auto py-10 px-4">
         <header className="flex justify-between items-center mb-8">
           <p className="text-gray-600">
-            Logado como: <strong>{session?.user?.name}</strong>
+            Logado como: <strong>{session?.user?.name || 'Modo Visual'}</strong>
           </p>
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="text-red-600 hover:underline text-sm"
-          >
-            Sair
-          </button>
+          {!modoVisual && (
+            <button
+              onClick={() => signOut({ callbackUrl: "/login" })}
+              className="text-red-600 hover:underline text-sm"
+            >
+              Sair
+            </button>
+          )}
         </header>
 
         <div className="bg-white p-6 rounded-xl shadow mb-10">
@@ -165,7 +176,6 @@ export default function PaginaAdmin() {
           </form>
         </div>
 
-        {/* Lista */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Lojas Cadastradas</h2>
           {lojas.length === 0 ? (

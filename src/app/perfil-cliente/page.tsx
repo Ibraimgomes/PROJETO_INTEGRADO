@@ -4,6 +4,8 @@ import { useSession, signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
+
 export default function PerfilCliente() {
   const { data: session, status, update } = useSession()
   const router = useRouter()
@@ -14,13 +16,20 @@ export default function PerfilCliente() {
   const [erro, setErro] = useState('')
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login-cliente')
-    } else if (session?.user.role !== 'cliente') {
-      router.push('/')
-    } else if (session?.user) {
-      setNome(session.user.name || '')
-      setEmail(session.user.email || '')
+    if (!modoVisual) {
+      if (status === 'unauthenticated') {
+        router.push('/login-cliente')
+        return
+      }
+      if (session?.user.role !== 'cliente') {
+        router.push('/')
+        return
+      }
+    }
+
+    if (session?.user || modoVisual) {
+      setNome(session?.user?.name || 'Nome Teste')
+      setEmail(session?.user?.email || 'teste@email.com')
     }
   }, [status, session])
 
@@ -47,11 +56,13 @@ export default function PerfilCliente() {
     }
   }
 
-  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil.teste..teste</p>
+  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil...</p>
 
   return (
     <main className="max-w-xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6 text-blue-700">Meu Perfilteste</h1>
+      <h1 className="text-2xl font-bold mb-6 text-blue-700">
+        Meu Perfil
+      </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -84,12 +95,14 @@ export default function PerfilCliente() {
         </button>
       </form>
 
-      <button
-        onClick={() => signOut({ callbackUrl: '/login-cliente' })}
-        className="mt-6 text-red-600 underline"
-      >
-        Sair da conta
-      </button>
+      {!modoVisual && (
+        <button
+          onClick={() => signOut({ callbackUrl: '/login-cliente' })}
+          className="mt-6 text-red-600 underline"
+        >
+          Sair da conta
+        </button>
+      )}
     </main>
   )
 }

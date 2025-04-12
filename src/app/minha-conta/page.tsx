@@ -4,6 +4,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
+
 interface Loja {
   nome: string
   descricao: string
@@ -21,15 +23,19 @@ export default function MinhaConta() {
   const [erro, setErro] = useState("")
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/login-cliente')
+    if (!modoVisual) {
+      if (status === 'unauthenticated') {
+        router.push('/login-cliente')
+        return
+      }
+
+      if (status === 'authenticated' && session?.user.role !== 'cliente') {
+        router.push('/')
+        return
+      }
     }
 
-    if (status === 'authenticated' && session?.user.role !== 'cliente') {
-      router.push('/')
-    }
-
-    if (status === 'authenticated') {
+    if (status === 'authenticated' || modoVisual) {
       fetch('/api/minha-loja')
         .then(res => res.json())
         .then(data => {
@@ -48,7 +54,7 @@ export default function MinhaConta() {
   return (
     <main className="max-w-xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-2 text-blue-700">
-        Olá, {session?.user.name}!
+        Olá, {session?.user.name || 'Modo Visual'}!
       </h1>
 
       <div className="mb-4">

@@ -9,7 +9,6 @@ import Rodape from "@/components/Rodape";
 export default function PaginaTotalConect() {
     return (
         <main>
-            <BarraNavegacao />
 
             <SecaoPrincipal />
 
