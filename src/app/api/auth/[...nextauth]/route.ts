@@ -1,12 +1,10 @@
-// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
-import sharp from 'sharp'
-import slugify from 'slugify'
+import type { AuthOptions } from 'next-auth'
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credenciais',
@@ -17,37 +15,39 @@ const handler = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.senha) return null
 
-        // 🔎 Busca usuário no banco
+
+
         const usuario = await prisma.user.findUnique({
           where: { email: credentials.email }
         })
 
         if (!usuario) return null
 
-        // 🔐 Compara senha com bcrypt
-        const senhaCorreta = await bcrypt.compare(credentials.senha, usuario.password)
 
+        const senhaCorreta = await bcrypt.compare(credentials.senha, usuario.password)
         if (!senhaCorreta) return null
 
-        // ✅ Retorna usuário autorizado
+
         return {
-          id: String(usuario.id), // ✅ Agora está no tipo correto
+          id: String(usuario.id), // ✅ garante que será string
           name: usuario.name,
           email: usuario.email,
           role: usuario.role
         }
-
       }
     })
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role
+      if (user) {
+        token.role = user.role
+      }
       return token
     },
     async session({ session, token }) {
-      if (token && session.user) {
+      if (session.user && token) {
         session.user.role = token.role
+        session.user.id = token.sub ?? '' // ✅ evita erro de tipo
       }
       return session
     }
@@ -55,11 +55,12 @@ const handler = NextAuth({
   pages: {
     signIn: '/login'
   },
-
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt'
   }
-})
+}
+
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

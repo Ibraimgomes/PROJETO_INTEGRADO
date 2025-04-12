@@ -2,21 +2,44 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+interface Loja {
+  nome: string
+  descricao: string
+  categoria: string
+  link: string
+  imagem: string
+  visivel: boolean
+}
 
 export default function MinhaConta() {
   const { data: session, status } = useSession()
   const router = useRouter()
 
+  const [loja, setLoja] = useState<Loja | null>(null)
+  const [erro, setErro] = useState("")
+
   useEffect(() => {
-    // Se não estiver logado, redireciona pro login do cliente
     if (status === 'unauthenticated') {
       router.push('/login-cliente')
     }
 
-    // Se estiver logado mas não for cliente, redireciona pra home
     if (status === 'authenticated' && session?.user.role !== 'cliente') {
       router.push('/')
+    }
+
+    if (status === 'authenticated') {
+      fetch('/api/minha-loja')
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            setErro(data.error)
+          } else {
+            setLoja(data)
+          }
+        })
+        .catch(() => setErro("Erro ao carregar dados da loja."))
     }
   }, [status, session])
 
@@ -25,9 +48,31 @@ export default function MinhaConta() {
   return (
     <main className="max-w-xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold mb-4 text-blue-700">Olá, {session?.user.name}!</h1>
-      <p className="text-gray-700">Bem-vindo à sua área de cliente.</p>
 
-      {/* Aqui você pode listar pedidos, perfil, histórico etc */}
+      {erro && (
+        <p className="text-red-600 font-semibold">{erro}</p>
+      )}
+
+      {loja ? (
+        <div className="bg-white rounded-xl shadow p-6 mt-4 space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800">Sua Loja</h2>
+
+          <p><strong>Nome:</strong> {loja.nome}</p>
+          <p><strong>Descrição:</strong> {loja.descricao}</p>
+          <p><strong>Categoria:</strong> {loja.categoria}</p>
+          <p><strong>Link:</strong> <a href={loja.link} target="_blank" className="text-blue-600 underline">{loja.link}</a></p>
+          <p><strong>Status:</strong> {loja.visivel ? 'Ativa' : 'Oculta'}</p>
+
+          {loja.imagem && (
+            <div className="mt-4">
+              <p className="mb-1 font-semibold">Logo:</p>
+              <img src={`/logos/${loja.imagem}`} alt="Logo da loja" className="w-32 h-32 object-contain border rounded" />
+            </div>
+          )}
+        </div>
+      ) : !erro ? (
+        <p className="text-gray-600 mt-6">Carregando dados da loja...</p>
+      ) : null}
     </main>
   )
 }
