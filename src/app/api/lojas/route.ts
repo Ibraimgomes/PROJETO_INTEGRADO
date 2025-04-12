@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       orderBy: { id: 'desc' },
     });
 
+
     return NextResponse.json(lojas);
   } catch (error) {
     console.error('❌ Erro ao buscar lojas:', error);

@@ -38,7 +38,7 @@ export default function PaginaAdmin() {
         router.push('/login')
         return
       }
-      if (status === 'authenticated' && session?.user.role !== 'admin') {
+      if (session?.user.role !== 'admin') {
         router.push('/')
         return
       }
@@ -168,7 +168,10 @@ export default function PaginaAdmin() {
 
             <input type="text" placeholder="Nome do cliente" value={formulario.clienteNome || ""} onChange={(e) => atualizarCampo("clienteNome", e.target.value)} className="input" required />
             <input type="email" placeholder="Email do cliente" value={formulario.clienteEmail || ""} onChange={(e) => atualizarCampo("clienteEmail", e.target.value)} className="input" required />
-            <input type="password" placeholder="Senha do cliente" value={formulario.clienteSenha || ""} onChange={(e) => atualizarCampo("clienteSenha", e.target.value)} className="input sm:col-span-2" required />
+
+            {!modoVisual && (
+              <input type="password" placeholder="Senha do cliente" value={formulario.clienteSenha || ""} onChange={(e) => atualizarCampo("clienteSenha", e.target.value)} className="input sm:col-span-2" required />
+            )}
 
             <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 sm:col-span-2">
               {modoEdicao ? "Atualizar Loja" : "Cadastrar Loja"}
@@ -176,6 +179,7 @@ export default function PaginaAdmin() {
           </form>
         </div>
 
+        {/* Lista */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Lojas Cadastradas</h2>
           {lojas.length === 0 ? (

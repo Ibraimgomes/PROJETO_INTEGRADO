@@ -31,12 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* Rodapé padrão */}
           <footer className="border-t mt-10 py-6 text-center text-sm text-gray-600">
             <div className="flex justify-center gap-6">
-              <a href="/minha-conta" className="hover:underline text-blue-600">
-                Área do Cliente
-              </a>
-              <a href="/login" className="hover:underline text-blue-600">
-                Área Administrativa
-              </a>
+
             </div>
           </footer>
         </Providers>

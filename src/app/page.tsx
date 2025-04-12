@@ -16,7 +16,7 @@ interface Loja {
 }
 
 const categorias = [
-  "Todos", "teste1", "teste2", "Restaurante", "Mercado", "Auto", "Tecnologia",
+  "Todos", "Restaurante", "Mercado", "Auto", "Tecnologia",
   "Padaria", "Barbearia", "Moda", "Serviços", "Pet Shop", "Educação"
 ];
 
@@ -25,13 +25,10 @@ export default function PaginaPrincipalCametaOn() {
   const [mostrarTodos, setMostrarTodos] = useState(false);
   const [lojas, setLojas] = useState<Loja[]>([]);
 
-  // 🔄 Carrega as lojas da API com verificação extra de segurança
   useEffect(() => {
     async function carregarLojas() {
       try {
         const res = await fetch("/api/lojas");
-
-        // Evita erro se o status não for 200
         if (!res.ok) {
           console.error("Erro na resposta da API:", res.status);
           setLojas([]);
@@ -39,8 +36,6 @@ export default function PaginaPrincipalCametaOn() {
         }
 
         const data = await res.json();
-
-        // Garante que só aceita array
         if (Array.isArray(data)) {
           setLojas(data);
         } else {
@@ -56,7 +51,6 @@ export default function PaginaPrincipalCametaOn() {
     carregarLojas();
   }, []);
 
-  // ✅ Protege o uso do .filter() contra valores inválidos
   const lojasFiltradas = Array.isArray(lojas)
     ? lojas.filter((p) => {
       if (busca === "" || busca.toLowerCase() === "todos") return true;
@@ -73,13 +67,15 @@ export default function PaginaPrincipalCametaOn() {
     : lojasFiltradas.slice(0, quantidadeVisivel);
 
   return (
-    <main>
+    <main className="bg-[#111] text-white">
+      <BarraNavegacao />
 
-      <HeroCameTaOn aoBuscar={(texto) => setBusca(texto)} categorias={categorias} />
+      <HeroCameTaOn />
 
-      <section className="py-12 px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Seção de lojas com fundo branco */}
+      <section className="bg-white text-gray-800 py-12 px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-colors">
         {lojasExibidas.length === 0 ? (
-          <p className="text-center col-span-full text-gray-600">
+          <p className="text-center col-span-full text-gray-500">
             Nenhum parceiro encontrado.
           </p>
         ) : (
@@ -99,24 +95,24 @@ export default function PaginaPrincipalCametaOn() {
       </section>
 
       {lojasFiltradas.length > quantidadeVisivel && (
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 bg-white py-4">
           <button
             onClick={() => setMostrarTodos(!mostrarTodos)}
-            className="bg-blue-700 hover:bg-blue-800 font-semibold underline text-white px-4 py-2 rounded"
+            className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 font-semibold rounded transition"
           >
             {mostrarTodos ? "Ver menos" : "Ver mais"}
           </button>
         </div>
       )}
 
-      <section className="py-20 px-6 flex flex-col md:flex-row items-center justify-center gap-16">
+      <section className="bg-white text-gray-800 py-20 px-6 flex flex-col md:flex-row items-center justify-center gap-16">
         <img
           src="/img/sejaMembro.PNG"
           alt="Ilustração convite para parceiros"
-          className="w-64 md:w-80"
+          className="w-64 md:w-80 rounded shadow-md"
         />
-        <div className="max-w-sm text-center md:text-left">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+        <div className="max-w-md text-center md:text-left">
+          <h2 className="text-3xl font-bold mb-4">
             Impulsione sua marca com o CameTáOn
           </h2>
           <p className="text-gray-600 mb-6">
@@ -124,12 +120,13 @@ export default function PaginaPrincipalCametaOn() {
           </p>
           <a
             href="/totalconect"
-            className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
           >
             Saiba mais
           </a>
         </div>
       </section>
+
 
       <Rodape />
     </main>
