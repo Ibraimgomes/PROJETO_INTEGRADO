@@ -47,7 +47,18 @@ export default function MinhaConta() {
 
   return (
     <main className="max-w-xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-700">Olá, {session?.user.name}!</h1>
+      <h1 className="text-2xl font-bold mb-2 text-blue-700">
+        Olá, {session?.user.name}!
+      </h1>
+
+      <div className="mb-4">
+        <a
+          href="/perfil-cliente"
+          className="inline-block text-sm text-blue-600 underline hover:text-blue-800"
+        >
+          Ver meu perfil
+        </a>
+      </div>
 
       {erro && (
         <p className="text-red-600 font-semibold">{erro}</p>
