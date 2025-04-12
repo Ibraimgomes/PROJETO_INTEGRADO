@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 🚫 VPS/local-only files (nunca subir para o GitHub)
+deploy.sh
+public/logos/
