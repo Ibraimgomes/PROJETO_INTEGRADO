@@ -47,7 +47,7 @@ export default function PerfilCliente() {
     }
   }
 
-  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil...teste</p>
+  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil.teste..teste</p>
 
   return (
     <main className="max-w-xl mx-auto py-10 px-4">

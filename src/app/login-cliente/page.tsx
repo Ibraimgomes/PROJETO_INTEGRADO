@@ -51,7 +51,7 @@ export default function LoginCliente() {
           type="submit"
           className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
         >
-          Teste
+          Teste11
         </button>
         {erro && <p className="text-red-600">{erro}</p>}
       </form>

@@ -68,7 +68,7 @@ export default function MinhaConta() {
         <div className="bg-white rounded-xl shadow p-6 mt-4 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Sua Loja</h2>
 
-          <p><strong>Nome teste:</strong> {loja.nome}</p>
+          <p><strong>Nome teste teste:</strong> {loja.nome}</p>
           <p><strong>Descrição:</strong> {loja.descricao}</p>
           <p><strong>Categoria:</strong> {loja.categoria}</p>
           <p><strong>Link:</strong> <a href={loja.link} target="_blank" className="text-blue-600 underline">{loja.link}</a></p>
