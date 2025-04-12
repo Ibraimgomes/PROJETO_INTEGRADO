@@ -74,7 +74,7 @@ export default function PaginaPrincipalCametaOn() {
 
   return (
     <main>
-      <BarraNavegacao />
+
       <HeroCameTaOn aoBuscar={(texto) => setBusca(texto)} categorias={categorias} />
 
       <section className="py-12 px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -109,7 +109,7 @@ export default function PaginaAdmin() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <BarraNavegacao />
+
 
       <div className="max-w-4xl mx-auto py-10 px-4">
         <header className="flex justify-between items-center mb-8">
