@@ -18,9 +18,8 @@ export default function BarraNavegacao() {
         <li><Link href="/totalconect">TotalConect</Link></li>
         <li><Link href="#planos">Planos</Link></li>
         <li><Link href="#contato">Contato</Link></li>
-
         <li><Link href="/login-cliente">Para Empresas</Link></li>
-<li><Link href="/login">Admin</Link></li>
+        <li><Link href="/login">Admin</Link></li>
 
       </ul>
 
@@ -37,7 +36,7 @@ export default function BarraNavegacao() {
           <li><Link href="#planos" onClick={() => setMenuAberto(false)}>Planos</Link></li>
           <li><Link href="#contato" onClick={() => setMenuAberto(false)}>Contato</Link></li>
           <li><Link href="/login-cliente">Cliente</Link></li>
-<li><Link href="/login">Admin</Link></li>
+          <li><Link href="/login">Admin</Link></li>
 
         </ul>
       )}

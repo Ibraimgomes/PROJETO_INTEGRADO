@@ -1,0 +1,5 @@
+vscode macobook:
+./commit-git.sh
+
+vps:
+ ./deploy.sh   
