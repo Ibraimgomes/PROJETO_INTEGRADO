@@ -47,11 +47,11 @@ export default function PerfilCliente() {
     }
   }
 
-  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil...</p>
+  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil...teste</p>
 
   return (
     <main className="max-w-xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6 text-blue-700">Meu Perfil</h1>
+      <h1 className="text-2xl font-bold mb-6 text-blue-700">Meu Perfilteste</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
