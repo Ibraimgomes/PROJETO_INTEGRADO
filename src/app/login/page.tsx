@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <main className="max-w-md mx-auto py-20 px-4">
-      <h1 className="text-2xl font-bold mb-4 text-center text-blue-700">TESTE V1</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center text-blue-700">TESTE V2</h1>
       <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
