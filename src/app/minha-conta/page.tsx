@@ -68,16 +68,36 @@ export default function MinhaConta() {
         <div className="bg-white rounded-xl shadow p-6 mt-4 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Sua Loja</h2>
 
-          <p><strong>Nome teste teste:</strong> {loja.nome}</p>
+          {!loja.visivel && (
+            <div className="bg-yellow-100 text-yellow-800 px-4 py-3 rounded border border-yellow-300 space-y-3">
+              <p className="font-medium">⚠️ Sua loja está inativa no momento.</p>
+              <a
+                href="/total_conect#planos"
+                className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium"
+              >
+                Renovar minha assinatura
+              </a>
+            </div>
+          )}
+
+          <p><strong>Nome:</strong> {loja.nome}</p>
           <p><strong>Descrição:</strong> {loja.descricao}</p>
           <p><strong>Categoria:</strong> {loja.categoria}</p>
-          <p><strong>Link:</strong> <a href={loja.link} target="_blank" className="text-blue-600 underline">{loja.link}</a></p>
-          <p><strong>Status:</strong> {loja.visivel ? 'Ativa' : 'Oculta'}</p>
+          <p>
+            <strong>Link:</strong>{' '}
+            <a href={loja.link} target="_blank" className="text-blue-600 underline">
+              {loja.link}
+            </a>
+          </p>
 
           {loja.imagem && (
             <div className="mt-4">
               <p className="mb-1 font-semibold">Logo:</p>
-              <img src={`/logos/${loja.imagem}`} alt="Logo da loja" className="w-32 h-32 object-contain border rounded" />
+              <img
+                src={`/logos/${loja.imagem}`}
+                alt="Logo da loja"
+                className="w-32 h-32 object-contain border rounded"
+              />
             </div>
           )}
         </div>
