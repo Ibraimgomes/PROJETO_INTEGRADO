@@ -57,5 +57,6 @@ export default function CardParceiro({
         </div>
       </div>
     </motion.a>
+
   )
 }
