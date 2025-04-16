@@ -1,3 +1,4 @@
+// PaginaAdmin.tsx atualizado com endereco e horarioFuncionamento
 'use client'
 
 import { useSession, signOut } from 'next-auth/react'
@@ -15,6 +16,8 @@ interface Loja {
   link: string
   imagem: string
   visivel: boolean
+  endereco?: string
+  horarioFuncionamento?: string
 }
 
 export default function PaginaAdmin() {
@@ -152,6 +155,9 @@ export default function PaginaAdmin() {
             <input type="text" placeholder="Categoria" value={formulario.categoria || ""} onChange={(e) => atualizarCampo("categoria", e.target.value)} className="input" required />
             <input type="url" placeholder="Link do site" value={formulario.link || ""} onChange={(e) => atualizarCampo("link", e.target.value)} className="input" required />
 
+            <input type="text" placeholder="Endereço completo" value={formulario.endereco || ""} onChange={(e) => atualizarCampo("endereco", e.target.value)} className="input sm:col-span-2" required />
+            <input type="text" placeholder="Horário de funcionamento" value={formulario.horarioFuncionamento || ""} onChange={(e) => atualizarCampo("horarioFuncionamento", e.target.value)} className="input sm:col-span-2" required />
+
             <input
               type="file"
               accept="image/*"
@@ -192,6 +198,8 @@ export default function PaginaAdmin() {
                     <h3 className="font-bold">{loja.nome}</h3>
                     <p className="text-sm text-gray-600">{loja.descricao}</p>
                     <p className="text-xs text-blue-600">{loja.link}</p>
+                    {loja.endereco && <p className="text-sm text-gray-700 mt-1">📍 {loja.endereco}</p>}
+                    {loja.horarioFuncionamento && <p className="text-sm text-gray-600 italic">🕒 {loja.horarioFuncionamento}</p>}
                     {!loja.visivel && <span className="text-red-500 font-semibold block mt-1">[Loja Oculta]</span>}
                     {loja.imagem && (
                       <img src={`/logos/${loja.imagem}`} alt="Logo" className="w-16 mt-2 rounded" />
