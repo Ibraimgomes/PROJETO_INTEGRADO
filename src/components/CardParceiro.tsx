@@ -37,50 +37,34 @@ export default function CardParceiroGlass({
   facebook,
   site,
 }: Parceiro) {
-  const [expandir, setExpandir] = useState(false);
   const caminhoImagem = imagem.startsWith('http') ? imagem : `/logos/${imagem}`;
 
   return (
     <motion.div
-      className="relative w-full max-w-sm bg-white/90 backdrop-blur-2xl rounded-2xl p-6 shadow-[12px_12px_24px_-12px_rgba(0,0,0,0.2)] transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-      onClick={() => setExpandir(!expandir)}
-      onMouseEnter={() => setExpandir(true)}
-      onMouseLeave={() => setExpandir(false)}
+      className="relative w-full max-w-sm bg-white/90 backdrop-blur-xl rounded-2xl p-6 shadow-xl transition-all duration-300 hover:scale-[1.02]"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
     >
-      <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+      <div className="flex flex-col items-center text-center gap-4">
+        {/* Imagem */}
+        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
             src={caminhoImagem}
             alt={`Logo de ${nome}`}
-            className="object-cover w-full h-full"
+            className="w-full h-full object-cover"
           />
         </div>
 
+        {/* Informações principais */}
         <div className="w-full">
           <h3 className="text-xl font-bold text-gray-800">{nome}</h3>
-          <p className="text-sm text-gray-500 mb-2">{categoria} • {distancia}</p>
-          <p className="text-sm text-blue-700 font-semibold mb-2">★ {avaliacao.toFixed(1)}</p>
-
-          {expandir && (
-            <motion.div
-              className="text-sm text-gray-700 mt-2 space-y-1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              {destaque && <p className="font-semibold text-blue-500">📌 {destaque}</p>}
-              <p>{descricao}</p>
-              {tempo && <p>⏱ Tempo estimado: {tempo}</p>}
-              {taxa && <p>💰 Taxa: {taxa}</p>}
-            </motion.div>
-          )}
+          <p className="text-sm text-gray-500">{categoria} • {distancia}</p>
+          <p className="text-sm text-blue-700 font-semibold">★ {avaliacao.toFixed(1)}</p>
         </div>
 
         {/* Redes sociais */}
-        <div className="flex justify-center gap-3 mt-4">
+        <div className="flex justify-center gap-3 mt-2">
           {instagram && (
             <a
               href={instagram}
@@ -123,6 +107,7 @@ export default function CardParceiroGlass({
           )}
         </div>
 
+        {/* Botão */}
         <a
           href={link}
           target="_blank"

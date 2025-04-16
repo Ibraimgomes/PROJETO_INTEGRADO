@@ -44,6 +44,8 @@ export async function POST(req: NextRequest) {
     const categoria = formData.get('categoria')?.toString() || '';
     const link = formData.get('link')?.toString() || '';
     const visivel = formData.get('visivel') === 'true';
+    const endereco = formData.get('endereco')?.toString() || '';
+    const horarioFuncionamento = formData.get('horarioFuncionamento')?.toString() || '';
 
     const clienteNome = formData.get('clienteNome')?.toString() || '';
     const clienteEmail = formData.get('clienteEmail')?.toString() || '';
@@ -102,6 +104,9 @@ export async function POST(req: NextRequest) {
         descricao,
         categoria,
         link,
+        endereco,
+        horarioFuncionamento,
+
         imagem: nomeDaImagem,
         visivel,
         clienteId: cliente.id,

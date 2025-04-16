@@ -26,4 +26,9 @@ model Loja {
   visivel    Boolean @default(true)
   clienteId  Int
   cliente    User    @relation(fields: [clienteId], references: [id])
+
+  // ✅ Campos novos
+  endereco   String?
+  horarioFuncionamento String?
 }
+
