@@ -3,6 +3,10 @@
 import { useState, useEffect } from "react";
 import BarraNavegacao from "@/components/BarraNavegacao";
 import HeroCameTaOn from "@/components/HeroCameTaOn";
+
+import FiltroBusca from "../components/FiltroBusca";
+
+
 import Rodape from "@/components/Rodape";
 import CardParceiro from "@/components/CardParceiro";
 
@@ -71,6 +75,7 @@ export default function PaginaPrincipalCametaOn() {
       <BarraNavegacao />
 
       <HeroCameTaOn />
+      <FiltroBusca busca={busca} setBusca={setBusca} />
 
       {/* Seção de lojas com fundo branco */}
       <section className="bg-white text-gray-800 py-12 px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-colors">
