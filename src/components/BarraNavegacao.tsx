@@ -40,9 +40,6 @@ export default function BarraNavegacao() {
           <li><Link href="/total_conect" className="hover:text-blue-600 transition">TotalConect</Link></li>
           <li><Link href="/total_conect#planos" className="hover:text-blue-600 transition">Planos</Link></li>
           <li><Link href="/total_conect#contato" className="hover:text-blue-600 transition">Contato</Link></li>
-
-          <li><Link href="/teste" className="hover:text-blue-600 transition">Teste</Link></li>
-
           <li><Link href="/login-cliente" className="hover:text-blue-600 transition">Para Empresas</Link></li>
           <li><Link href="/login" className="hover:text-blue-600 transition">Admin</Link></li>
         </ul>
