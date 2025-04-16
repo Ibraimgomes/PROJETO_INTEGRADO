@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail } from 'lucide-react';
+import { useState } from 'react';
 
-export interface Parceiro {
+interface Parceiro {
   nome: string;
   descricao: string;
   link: string;
@@ -17,7 +16,7 @@ export interface Parceiro {
   destaque?: string;
 }
 
-export default function CardParceiro({
+export default function CardParceiroGlass({
   nome,
   descricao,
   link,
@@ -25,62 +24,58 @@ export default function CardParceiro({
   avaliacao = 4.6,
   categoria = 'Serviços',
   distancia = '1.2 km',
+  tempo,
+  taxa,
+  destaque,
 }: Parceiro) {
+  const [expandir, setExpandir] = useState(false);
   const caminhoImagem = imagem.startsWith('http') ? imagem : `/logos/${imagem}`;
-  const [hover, setHover] = useState(false);
 
   return (
     <motion.div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="relative w-full max-w-xs h-[320px] bg-white rounded-[32px] p-1 shadow-[0_70px_30px_-50px_#cbd5e1] transition-all duration-500 group overflow-hidden"
+      className="relative w-full max-w-sm bg-white/90 backdrop-blur-2xl rounded-2xl p-6 shadow-[12px_12px_24px_-12px_rgba(0,0,0,0.2)] transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+      onClick={() => setExpandir(!expandir)}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
     >
-      {/* Botão de ação (ex: email ou link) */}
-      <button className="absolute top-4 right-4 bg-transparent z-20">
-        <Mail className="w-5 h-5 text-pink-400 hover:text-pink-600 transition" />
-      </button>
-
-      {/* Imagem de perfil/loja */}
-      <div
-        className={`absolute w-[calc(100%-8px)] h-[calc(100%-8px)] top-1 left-1 rounded-[29px] border transition-all duration-500 overflow-hidden ${hover
-            ? 'w-[100px] h-[100px] top-3 left-3 z-30 rounded-full border-4 border-pink-300'
-            : 'z-10 border-transparent'
-          }`}
-      >
-        <img
-          src={caminhoImagem}
-          alt={`Logo de ${nome}`}
-          className={`object-cover w-full h-full transition-all duration-500 ${hover ? 'scale-150 object-top' : ''
-            }`}
-        />
-      </div>
-
-      {/* Área inferior que sobe no hover */}
-      <div
-        className={`absolute left-1 right-1 bg-pink-300 bottom-1 rounded-[29px] z-20 transition-all duration-500 shadow-inner ${hover ? 'top-[90px] rounded-t-[80px]' : 'top-[82%]'
-          }`}
-      >
-        <div className="px-6 pt-4 pb-3 text-white">
-          <span className="block font-bold text-lg truncate">{nome}</span>
-          <span className="block text-sm mt-1">{descricao}</span>
-
-          <div className="mt-3 flex items-center justify-between text-xs">
-            <div className="flex gap-3 items-center">
-              <span className="font-bold">★ {avaliacao.toFixed(1)}</span>
-              <span>{categoria}</span>
-              <span>{distancia}</span>
-            </div>
-            <a
-              href={link}
-              target="_blank"
-              className="bg-white text-pink-500 text-[10px] px-3 py-1 rounded-full font-semibold hover:bg-pink-500 hover:text-white transition"
-            >
-              Ver mais
-            </a>
-          </div>
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+          <img
+            src={caminhoImagem}
+            alt={`Logo de ${nome}`}
+            className="object-cover w-full h-full"
+          />
         </div>
+
+        <div className="w-full">
+          <h3 className="text-xl font-bold text-gray-800">{nome}</h3>
+          <p className="text-sm text-gray-500 mb-2">{categoria} • {distancia}</p>
+          <p className="text-sm text-blue-700 font-semibold mb-2">★ {avaliacao.toFixed(1)}</p>
+
+          {expandir && (
+            <motion.div
+              className="text-sm text-gray-700 mt-2 space-y-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              {destaque && <p className="font-semibold text-blue-500">📌 {destaque}</p>}
+              <p>{descricao}</p>
+              {tempo && <p>⏱ Tempo estimado: {tempo}</p>}
+              {taxa && <p>💰 Taxa: {taxa}</p>}
+            </motion.div>
+          )}
+        </div>
+
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition"
+        >
+          Ver mais
+        </a>
       </div>
     </motion.div>
   );
