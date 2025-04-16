@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import BarraNavegacao from '@/components/BarraNavegacao'
+import MapaEndereco from '@/components/MapaEndereco'
 
 const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
 
@@ -155,7 +156,12 @@ export default function PaginaAdmin() {
             <input type="text" placeholder="Categoria" value={formulario.categoria || ""} onChange={(e) => atualizarCampo("categoria", e.target.value)} className="input" required />
             <input type="url" placeholder="Link do site" value={formulario.link || ""} onChange={(e) => atualizarCampo("link", e.target.value)} className="input" required />
 
-            <input type="text" placeholder="Endereço completo" value={formulario.endereco || ""} onChange={(e) => atualizarCampo("endereco", e.target.value)} className="input sm:col-span-2" required />
+            <MapaEndereco
+              endereco={formulario.endereco || ''}
+              setEndereco={(valor) => atualizarCampo('endereco', valor)}
+            />
+
+
             <input type="text" placeholder="Horário de funcionamento" value={formulario.horarioFuncionamento || ""} onChange={(e) => atualizarCampo("horarioFuncionamento", e.target.value)} className="input sm:col-span-2" required />
 
             <input

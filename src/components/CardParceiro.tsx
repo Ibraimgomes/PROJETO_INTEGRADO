@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 import { Instagram, Facebook, Phone, Globe } from 'lucide-react';
 
 interface Parceiro {
@@ -19,6 +18,8 @@ interface Parceiro {
   whatsapp?: string;
   facebook?: string;
   site?: string;
+  endereco?: string;
+  horarioFuncionamento?: string;
 }
 
 export default function CardParceiroGlass({
@@ -36,6 +37,8 @@ export default function CardParceiroGlass({
   whatsapp,
   facebook,
   site,
+  endereco,
+  horarioFuncionamento,
 }: Parceiro) {
   const caminhoImagem = imagem.startsWith('http') ? imagem : `/logos/${imagem}`;
 
@@ -57,10 +60,12 @@ export default function CardParceiroGlass({
         </div>
 
         {/* Informações principais */}
-        <div className="w-full">
+        <div className="w-full space-y-1">
           <h3 className="text-xl font-bold text-gray-800">{nome}</h3>
           <p className="text-sm text-gray-500">{categoria} • {distancia}</p>
           <p className="text-sm text-blue-700 font-semibold">★ {avaliacao.toFixed(1)}</p>
+          {endereco && <p className="text-sm text-gray-700">📍 {endereco}</p>}
+          {horarioFuncionamento && <p className="text-sm text-gray-600 italic">🕒 {horarioFuncionamento}</p>}
         </div>
 
         {/* Redes sociais */}
@@ -116,6 +121,17 @@ export default function CardParceiroGlass({
         >
           Ver mais
         </a>
+        {endereco && (
+          <a
+            href={`https://www.google.com/maps?q=${encodeURIComponent(endereco)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 rounded-lg transition text-sm"
+          >
+            Ver no mapa
+          </a>
+        )}
+
       </div>
     </motion.div>
   );
