@@ -1,5 +1,8 @@
-// PaginaAdmin.tsx atualizado com endereco e horarioFuncionamento
 'use client'
+
+
+
+
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
