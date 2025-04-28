@@ -18,17 +18,17 @@ export default function Rodape() {
           <div>
             <h3 className="text-white font-semibold mb-2">Navegação</h3>
             <ul className="space-y-1">
-              <li><Link href="/" className="hover:text-white transition">Início</a></li>
-              <li><Link href="/total_conect#planos" className="hover:text-white transition">Planos</a></li>
-              <li><Link href="/total_conect#contato" className="hover:text-white transition">Contato</a></li>
+              <li><Link href="/" className="hover:text-white transition">Início</Link></li>
+              <li><Link href="/total_conect#planos" className="hover:text-white transition">Planos</Link></li>
+              <li><Link href="/total_conect#contato" className="hover:text-white transition">Contato</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-semibold mb-2">Acesso</h3>
             <ul className="space-y-1">
-              <li><Link href="/login" className="hover:text-white transition">Área Admin</a></li>
-              <li><Link href="/login-cliente" className="hover:text-white transition">Área do Cliente</a></li>
+              <li><Link href="/login" className="hover:text-white transition">Área Admin</Link></li>
+              <li><Link href="/login-cliente" className="hover:text-white transition">Área do Cliente</Link></li>
             </ul>
           </div>
 
