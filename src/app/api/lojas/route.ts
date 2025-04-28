@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { writeFile } from 'fs/promises';
+// import { writeFile } from 'fs/promises';
 import path from 'path';
-import { randomUUID } from 'crypto';
+// import { randomUUID } from 'crypto';
 import bcrypt from 'bcryptjs';
 import sharp from 'sharp';
 import slugify from 'slugify';

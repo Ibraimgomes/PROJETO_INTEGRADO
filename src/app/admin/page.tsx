@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import BarraNavegacao from '@/components/BarraNavegacao'
 import MapaEndereco from '@/components/MapaEndereco'
 
 const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
@@ -52,7 +52,7 @@ export default function PaginaAdmin() {
     if (status === 'authenticated' || modoVisual) {
       carregarLojas()
     }
-  }, [status, session])
+  }, [status, session, router])
 
   async function carregarLojas() {
     try {
@@ -177,7 +177,7 @@ export default function PaginaAdmin() {
               }}
               className="sm:col-span-2"
             />
-            {logoPreview && <img src={logoPreview} alt="Preview" className="w-32 rounded shadow mt-2" />}
+            {logoPreview && <Image src={logoPreview} alt="Preview" className="w-32 rounded shadow mt-2" />}
 
             <input type="text" placeholder="Nome do cliente" value={formulario.clienteNome || ""} onChange={(e) => atualizarCampo("clienteNome", e.target.value)} className="input" required />
             <input type="email" placeholder="Email do cliente" value={formulario.clienteEmail || ""} onChange={(e) => atualizarCampo("clienteEmail", e.target.value)} className="input" required />
@@ -209,7 +209,7 @@ export default function PaginaAdmin() {
                     {loja.horarioFuncionamento && <p className="text-sm text-gray-600 italic">🕒 {loja.horarioFuncionamento}</p>}
                     {!loja.visivel && <span className="text-red-500 font-semibold block mt-1">[Loja Oculta]</span>}
                     {loja.imagem && (
-                      <img src={`/logos/${loja.imagem}`} alt="Logo" className="w-16 mt-2 rounded" />
+                      <Image src={`/logos/${loja.imagem}`} alt="Logo" className="w-16 mt-2 rounded" />
                     )}
                   </div>
                   <div className="flex flex-col items-end gap-1 text-sm">
