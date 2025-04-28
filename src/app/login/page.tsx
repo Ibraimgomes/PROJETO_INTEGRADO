@@ -1,8 +1,8 @@
+// File: src/app/login/page.tsx
 'use client'
 
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { getSession } from 'next-auth/react'
 import { useState } from 'react'
 
 export default function LoginPage() {
@@ -10,23 +10,39 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+
+    // Validação básica
+    if (!email.trim() || !password) {
+      setError('Email e senha são obrigatórios')
+      return
+    }
+
+    setLoading(true)
     const res = await signIn('credentials', {
       redirect: false,
       email,
       password,
     })
+    setLoading(false)
 
     if (res?.error) {
-      setError(res.error)
+      // exibe a mensagem enviada pelo back-end ou padroniza caso seja genérico
+      const msg =
+        res.error === 'CredentialsSignin'
+          ? 'E-mail ou senha inválidos'
+          : res.error
+      setError(msg)
       return
     }
 
-    const session = await getSession()
-    if (session?.user.role === 'admin') {
+    // redireciona conforme role
+    const session = await (await fetch('/api/auth/session')).json()
+    if (session?.user?.role === 'admin') {
       router.push('/admin')
     } else {
       router.push('/login-cliente')
@@ -44,6 +60,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 border rounded"
+            disabled={loading}
             required
           />
         </div>
@@ -54,15 +71,19 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 border rounded"
+            disabled={loading}
             required
           />
         </div>
         {error && <p className="text-red-600">{error}</p>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          className={`w-full py-2 rounded text-white ${
+            loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
+          disabled={loading}
         >
-          Entrar
+          {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
     </div>
