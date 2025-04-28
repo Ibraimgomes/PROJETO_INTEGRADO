@@ -41,6 +41,9 @@ export default function AdminPanel() {
   const [confirmarExcluirId, setConfirmarExcluirId] = useState<number | null>(null)
 
   useEffect(() => {
+    // Aguarda carregamento da sessão
+    if (status === 'loading') return
+
     if (!modoVisual) {
       if (status === 'unauthenticated') {
         router.push('/login')
@@ -51,7 +54,9 @@ export default function AdminPanel() {
         return
       }
     }
-    if (status === 'authenticated' || modoVisual) carregarLojas()
+
+    // Carrega lojas após validações
+    carregarLojas()
   }, [status, session, router])
 
   async function carregarLojas() {
