@@ -1,6 +1,5 @@
 'use client';
 
-import BarraNavegacao from "@/components/BarraNavegacao";
 import SecaoPrincipal from "@/components/SecaoPrincipal";
 import Beneficios from "@/components/Beneficios";
 import Precos from "@/components/Precos";

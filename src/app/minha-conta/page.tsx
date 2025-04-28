@@ -47,7 +47,7 @@ export default function MinhaConta() {
         })
         .catch(() => setErro("Erro ao carregar dados da loja."))
     }
-  }, [status, session])
+  }, [status, session, router])
 
   if (status === 'loading') return <p className="text-center mt-10">Verificando sessão...</p>
 
