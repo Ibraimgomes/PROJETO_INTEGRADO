@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import BarraNavegacao from "@/components/BarraNavegacao";
 import HeroCameTaOn from "@/components/HeroCameTaOn";
 import FiltroBusca from "../components/FiltroBusca";
+import Image from "next/image";
 
 
 import Rodape from "@/components/Rodape";
@@ -20,10 +21,10 @@ interface Loja {
   imagem: string;
 }
 
-const categorias = [
-  "Todos", "Restaurante", "Mercado", "Auto", "Tecnologia",
-  "Padaria", "Barbearia", "Moda", "Serviços", "Pet Shop", "Educação"
-];
+// const categorias = [
+//   "Todos", "Restaurante", "Mercado", "Auto", "Tecnologia",
+//   "Padaria", "Barbearia", "Moda", "Serviços", "Pet Shop", "Educação"
+// ];
 
 export default function PaginaPrincipalCametaOn() {
   const [busca, setBusca] = useState("");
@@ -112,7 +113,7 @@ export default function PaginaPrincipalCametaOn() {
       )}
 
       <section className="bg-white text-gray-800 py-20 px-6 flex flex-col md:flex-row items-center justify-center gap-16">
-        <img
+        <Image
           src="/img/sejaMembro.PNG"
           alt="Ilustração convite para parceiros"
           className="w-64 md:w-80 rounded shadow-md"

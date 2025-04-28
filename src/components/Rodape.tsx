@@ -1,4 +1,5 @@
 import { Instagram, Facebook, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Rodape() {
   return (
@@ -17,17 +18,17 @@ export default function Rodape() {
           <div>
             <h3 className="text-white font-semibold mb-2">Navegação</h3>
             <ul className="space-y-1">
-              <li><a href="/" className="hover:text-white transition">Início</a></li>
-              <li><a href="/total_conect#planos" className="hover:text-white transition">Planos</a></li>
-              <li><a href="/total_conect#contato" className="hover:text-white transition">Contato</a></li>
+              <li><Link href="/" className="hover:text-white transition">Início</a></li>
+              <li><Link href="/total_conect#planos" className="hover:text-white transition">Planos</a></li>
+              <li><Link href="/total_conect#contato" className="hover:text-white transition">Contato</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-semibold mb-2">Acesso</h3>
             <ul className="space-y-1">
-              <li><a href="/login" className="hover:text-white transition">Área Admin</a></li>
-              <li><a href="/login-cliente" className="hover:text-white transition">Área do Cliente</a></li>
+              <li><Link href="/login" className="hover:text-white transition">Área Admin</a></li>
+              <li><Link href="/login-cliente" className="hover:text-white transition">Área do Cliente</a></li>
             </ul>
           </div>
 

@@ -83,7 +83,7 @@ const planos = [
 
 export default function Precos() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [scrollX, setScrollX] = useState(0)
+  // const [scrollX, setScrollX] = useState(0)
 
   function scrollToLeft() {
     containerRef.current?.scrollBy({ left: -320, behavior: 'smooth' })

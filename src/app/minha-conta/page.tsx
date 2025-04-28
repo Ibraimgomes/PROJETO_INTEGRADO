@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
 
@@ -99,7 +100,7 @@ export default function MinhaConta() {
           {loja.imagem && (
             <div className="mt-4">
               <p className="mb-1 font-semibold">Logo:</p>
-              <img
+              <Image
                 src={`/logos/${loja.imagem}`}
                 alt="Logo da loja"
                 className="w-32 h-32 object-contain border rounded"

@@ -31,7 +31,7 @@ export default function PerfilCliente() {
       setNome(session?.user?.name || 'Nome Teste')
       setEmail(session?.user?.email || 'teste@email.com')
     }
-  }, [status, session])
+  }, [status, session, router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
