@@ -1,3 +1,4 @@
+// src/app/perfil-cliente/page.tsx
 'use client'
 
 import { useSession, signOut } from 'next-auth/react'
@@ -47,16 +48,24 @@ export default function PerfilCliente() {
 
       const data = await res.json()
 
-      if (!res.ok) throw new Error(data.error || 'Erro ao atualizar')
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao atualizar')
+      }
 
       setMensagem('Perfil atualizado com sucesso!')
       update() // força atualização da sessão
-    } catch (err: any) {
-      setErro(err.message || 'Erro ao atualizar')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setErro(error.message)
+      } else {
+        setErro(String(error))
+      }
     }
   }
 
-  if (status === 'loading') return <p className="text-center mt-10">Carregando perfil...</p>
+  if (status === 'loading') {
+    return <p className="text-center mt-10">Carregando perfil...</p>
+  }
 
   return (
     <main className="max-w-xl mx-auto py-10 px-4">
@@ -90,7 +99,10 @@ export default function PerfilCliente() {
         {mensagem && <p className="text-green-600 font-medium">{mensagem}</p>}
         {erro && <p className="text-red-600 font-medium">{erro}</p>}
 
-        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+        >
           Salvar Alterações
         </button>
       </form>
