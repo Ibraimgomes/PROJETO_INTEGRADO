@@ -1,57 +1,73 @@
-import NextAuth from 'next-auth'
+// src/lib/authOptions.ts
 import CredentialsProvider from 'next-auth/providers/credentials'
+import type { AuthOptions } from 'next-auth'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credenciais',
       credentials: {
-        email: { label: 'Email', type: 'text' },
-        senha: { label: 'Senha', type: 'password' }
+        email: { label: 'Email', type: 'text', placeholder: 'seu@email.com' },
+        senha: { label: 'Senha', type: 'password', placeholder: '********' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.senha) return null
+        if (!credentials?.email || !credentials?.senha) {
+          console.error('❌ Credenciais ausentes.')
+          return null
+        }
 
         const usuario = await prisma.user.findUnique({
-          where: { email: credentials.email }
+          where: { email: credentials.email.toLowerCase().trim() },
         })
 
-        if (!usuario) return null
+        if (!usuario) {
+          console.error('❌ Usuário não encontrado.')
+          return null
+        }
 
         const senhaCorreta = await bcrypt.compare(credentials.senha, usuario.password)
 
-        if (!senhaCorreta) return null
+        if (!senhaCorreta) {
+          console.error('❌ Senha incorreta.')
+          return null
+        }
 
         return {
           id: String(usuario.id),
           name: usuario.name,
           email: usuario.email,
-          role: usuario.role
+          role: usuario.role,
         }
-      }
-    })
+      },
+    }),
   ],
+
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.role = user.role
+      if (user) {
+        token.role = user.role
+        token.id = user.id
+      }
       return token
     },
     async session({ session, token }) {
-      if (session?.user && token?.role) {
-        session.user.role = token.role
+      if (session.user && token) {
+        session.user.role = token.role as string
+        session.user.id = token.id as string
       }
       return session
-    }
+    },
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: 'jwt'
-  },
-  pages: {
-    signIn: '/login'
-  }
-})
 
-export { handler as GET, handler as POST }
+  pages: {
+    signIn: '/login',
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
+
+  session: {
+    strategy: 'jwt',
+  },
+}
