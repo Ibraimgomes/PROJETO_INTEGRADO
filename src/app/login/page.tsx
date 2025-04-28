@@ -30,7 +30,7 @@ export default function LoginPage() {
     // Faz o login e, em caso de sucesso, redireciona para /admin
     await signIn('credentials', {
       email,
-      password,
+      senha: password,
       callbackUrl: '/admin',
     })
   }
