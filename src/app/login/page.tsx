@@ -1,32 +1,33 @@
-// File: src/app/login/page.tsx
+// src/app/login/page.tsx
 'use client'
 
 import { signIn } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
 export default function LoginPage() {
-  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
 
-  // Exibe erros via query param ?error=
+  // Lê ?error da URL via window.location
   useEffect(() => {
-    const err = searchParams.get('error')
-    if (err) {
-      setErrorMsg(
-        err === 'CredentialsSignin'
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const err = params.get('error')
+      if (err) {
+        setErrorMsg(err === 'CredentialsSignin'
           ? 'E-mail ou senha inválidos'
           : err
-      )
+        )
+      }
     }
-  }, [searchParams])
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setErrorMsg('')
-    // redireciona automaticamente para /admin em caso de sucesso
+
+    // Faz o login e, em caso de sucesso, redireciona para /admin
     await signIn('credentials', {
       email,
       password,
@@ -43,7 +44,7 @@ export default function LoginPage() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             className="w-full px-3 py-2 border rounded"
             required
           />
@@ -53,7 +54,7 @@ export default function LoginPage() {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             className="w-full px-3 py-2 border rounded"
             required
           />
