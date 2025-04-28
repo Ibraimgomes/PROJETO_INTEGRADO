@@ -1,9 +1,7 @@
-import dynamic from 'next/dynamic'
+// src/app/admin/page.tsx
+'use client'
 
-const AdminPanel = dynamic(
-  () => import('../../components/AdminPanel'),
-  { ssr: false }
-)
+import AdminPanel from '../../components/AdminPanel'
 
 export default function Page() {
   return <AdminPanel />
