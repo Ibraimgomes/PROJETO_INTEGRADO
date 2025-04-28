@@ -2,51 +2,37 @@
 'use client'
 
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
+
+  // Exibe erros via query param ?error=
+  useEffect(() => {
+    const err = searchParams.get('error')
+    if (err) {
+      setErrorMsg(
+        err === 'CredentialsSignin'
+          ? 'E-mail ou senha inválidos'
+          : err
+      )
+    }
+  }, [searchParams])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
-
-    // Validação básica
-    if (!email.trim() || !password) {
-      setError('Email e senha são obrigatórios')
-      return
-    }
-
-    setLoading(true)
-    const res = await signIn('credentials', {
-      redirect: false,
+    setErrorMsg('')
+    // redireciona automaticamente para /admin em caso de sucesso
+    await signIn('credentials', {
       email,
       password,
+      callbackUrl: '/admin',
     })
-    setLoading(false)
-
-    if (res?.error) {
-      // exibe a mensagem enviada pelo back-end ou padroniza caso seja genérico
-      const msg =
-        res.error === 'CredentialsSignin'
-          ? 'E-mail ou senha inválidos'
-          : res.error
-      setError(msg)
-      return
-    }
-
-    // redireciona conforme role
-    const session = await (await fetch('/api/auth/session')).json()
-    if (session?.user?.role === 'admin') {
-      router.push('/admin')
-    } else {
-      router.push('/login-cliente')
-    }
   }
 
   return (
@@ -60,7 +46,6 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 border rounded"
-            disabled={loading}
             required
           />
         </div>
@@ -71,19 +56,15 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 border rounded"
-            disabled={loading}
             required
           />
         </div>
-        {error && <p className="text-red-600">{error}</p>}
+        {errorMsg && <p className="text-red-600">{errorMsg}</p>}
         <button
           type="submit"
-          className={`w-full py-2 rounded text-white ${
-            loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
-          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
-          {loading ? 'Entrando...' : 'Entrar'}
+          Entrar
         </button>
       </form>
     </div>
