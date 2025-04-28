@@ -7,8 +7,8 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-// Importa MapaEndereco sem SSR
-const MapaEndereco = dynamic(() => import('@/components/MapaEndereco'), { ssr: false })
+// Carrega o componente de mapa apenas no cliente (não SSR)
+const MapaEndereco = dynamic(() => import('./MapaEndereco'), { ssr: false })
 
 const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
 
@@ -86,9 +86,11 @@ export default function AdminPanel() {
     if (logo) formData.append('logo', logo)
 
     try {
-      const res = await fetch('/api/lojas', { method: modoEdicao ? 'PUT' : 'POST', body: formData })
+      const method = modoEdicao ? 'PUT' : 'POST'
+      const url = modoEdicao ? `/api/lojas/${modoEdicao}` : '/api/lojas'
+      const res = await fetch(url, { method, body: formData })
       if (!res.ok) throw new Error()
-      setMensagem(modoEdicao ? 'Loja atualizada!' : 'Loja criada!')
+      setMensagem(modoEdicao ? 'Loja atualizada com sucesso!' : 'Loja criada com sucesso!')
       setFormulario({})
       setLogo(null)
       setLogoPreview(null)
@@ -130,7 +132,7 @@ export default function AdminPanel() {
       clienteNome: session?.user.name,
       clienteEmail: session?.user.email,
     })
-    setLogoPreview(`/logos/${store.imagem}`)
+    setLogoPreview(store.imagem.startsWith('data:') ? store.imagem : `/logos/${store.imagem}`)
   }
 
   return (
@@ -138,7 +140,7 @@ export default function AdminPanel() {
       <div className="max-w-4xl mx-auto py-10 px-4">
         <header className="flex justify-between items-center mb-8">
           <p className="text-gray-600">
-            Logado como: <strong>{session?.user?.name || 'Modo Visual'}</strong>
+            Logado como: <strong>{session?.user.name || 'Modo Visual'}</strong>
           </p>
           {!modoVisual && (
             <button onClick={() => signOut({ callbackUrl: '/login' })} className="text-red-600 hover:underline text-sm">
@@ -147,7 +149,63 @@ export default function AdminPanel() {
           )}
         </header>
 
-        {/* Formulário e lista de lojas */}
+        <section className="bg-white p-6 rounded-xl shadow mb-10">
+          <h1 className="text-2xl font-bold text-blue-700 mb-4 text-center">
+            {modoEdicao ? 'Editar Loja' : 'Cadastrar Nova Loja'}
+          </h1>
+          {mensagem && <div className="bg-green-100 text-green-800 p-3 rounded mb-4 text-center">{mensagem}</div>}
+          <form onSubmit={enviarFormulario} className="grid gap-4 sm:grid-cols-2">
+            <input type="text" placeholder="Nome" value={formulario.nome || ''} onChange={e => atualizarCampo('nome', e.target.value)} className="input" required />
+            <input type="text" placeholder="Descrição" value={formulario.descricao || ''} onChange={e => atualizarCampo('descricao', e.target.value)} className="input" required />
+            <input type="text" placeholder="Categoria" value={formulario.categoria || ''} onChange={e => atualizarCampo('categoria', e.target.value)} className="input" required />
+            <input type="url" placeholder="Link do site" value={formulario.link || ''} onChange={e => atualizarCampo('link', e.target.value)} className="input" required />
+            <MapaEndereco endereco={formulario.endereco || ''} setEndereco={v => atualizarCampo('endereco', v)} />
+            <input type="text" placeholder="Horário" value={formulario.horarioFuncionamento || ''} onChange={e => atualizarCampo('horarioFuncionamento', e.target.value)} className="input sm:col-span-2" required />
+            <input type="file" accept="image/*" onChange={handleFileChange} className="sm:col-span-2" />
+            {logoPreview && <Image src={logoPreview} alt="Preview" width={128} height={128} className="rounded shadow mt-2" />}
+            <input type="text" placeholder="Nome do cliente" value={formulario.clienteNome || ''} onChange={e => atualizarCampo('clienteNome', e.target.value)} className="input" required />
+            <input type="email" placeholder="Email do cliente" value={formulario.clienteEmail || ''} onChange={e => atualizarCampo('clienteEmail', e.target.value)} className="input" required />
+            {!modoVisual && <input type="password" placeholder="Senha do cliente" value={formulario.clienteSenha || ''} onChange={e => atualizarCampo('clienteSenha', e.target.value)} className="input sm:col-span-2" required />}
+            <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 sm:col-span-2">{modoEdicao ? 'Atualizar' : 'Cadastrar'}</button>
+          </form>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Lojas Cadastradas</h2>
+          {lojas.length === 0 ? (
+            <p className="text-gray-500">Nenhuma loja cadastrada.</p>
+          ) : (
+            lojas.map(store => (
+              <div key={store.id} className={`p-4 border rounded-xl shadow-sm ${!store.visivel ? 'bg-red-50' : 'bg-white'}`}>
+                <div className="flex justify-between items-start gap-4">
+                  <div>
+                    <h3 className="font-bold">{store.nome}</h3>
+                    <p className="text-sm text-gray-600">{store.descricao}</p>
+                    <p className="text-xs text-blue-600">{store.link}</p>
+                    {store.endereco && <p className="text-sm text-gray-700 mt-1">📍 {store.endereco}</p>}
+                    {store.horarioFuncionamento && <p className="text-sm text-gray-600 italic">🕒 {store.horarioFuncionamento}</p>}
+                    {!store.visivel && <span className="text-red-500 font-semibold block mt-1">[Oculta]</span>}
+                    {store.imagem && <Image src={`/logos/${store.imagem}`} alt="Logo" width={64} height={64} className="rounded mt-2" />}
+                  </div>
+                  <div className="flex flex-col items-end gap-1 text-sm">
+                    <button onClick={() => startEdit(store)} className="text-yellow-600 hover:underline">Editar</button>
+                    <button onClick={() => toggleVisibilidade(store.id, !store.visivel)} className="text-blue-600 hover:underline">{store.visivel ? 'Ocultar' : 'Reativar'}</button>
+                    <button onClick={() => confirmarExcluir(store.id)} className="text-red-600 hover:underline">Excluir</button>
+                  </div>
+                </div>
+                {confirmarExcluirId === store.id && (
+                  <div className="mt-2 p-4 bg-red-100 rounded">
+                    <p>Tem certeza que deseja excluir?</p>
+                    <div className="flex gap-2 mt-2">
+                      <button onClick={() => excluirLoja(store.id)} className="bg-red-600 text-white px-3 py-1 rounded">Sim</button>
+                      <button onClick={() => setConfirmarExcluirId(null)} className="px-3 py-1 rounded border">Não</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </section>
       </div>
     </main>
   )
