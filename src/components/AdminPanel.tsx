@@ -46,10 +46,10 @@ export default function AdminPanel() {
         return
       }
     }
-    if (status === 'authenticated' || modoVisual) carregarLojas()
+    if (status === 'authenticated' || modoVisual) loadStores()
   }, [status, session, router])
 
-  async function carregarLojas() {
+  async function loadStores() {
     try {
       const res = await fetch('/api/lojas?admin=true')
       const data = await res.json()
@@ -60,35 +60,33 @@ export default function AdminPanel() {
     }
   }
 
-  function atualizarCampo(campo: string, valor: string) {
-    setFormulario(prev => ({ ...prev, [campo]: valor }))
+  function updateField(field: string, value: string) {
+    setFormulario(prev => ({ ...prev, [field]: value }))
   }
 
-  function iniciarEdicao(loja: Loja) {
-    setModoEdicao(loja.id)
+  function startEdit(store: Loja) {
+    setModoEdicao(store.id)
     setFormulario({
-      nome: loja.nome,
-      descricao: loja.descricao,
-      categoria: loja.categoria,
-      link: loja.link,
-      endereco: loja.endereco,
-      horarioFuncionamento: loja.horarioFuncionamento,
+      nome: store.nome,
+      descricao: store.descricao,
+      categoria: store.categoria,
+      link: store.link,
+      endereco: store.endereco || '',
+      horarioFuncionamento: store.horarioFuncionamento || '',
       clienteNome: session?.user.name,
       clienteEmail: session?.user.email,
     })
-    setLogoPreview(loja.imagem ? `/logos/${loja.imagem}` : null)
+    setLogoPreview(store.imagem ? `/logos/${store.imagem}` : null)
   }
 
-  async function enviarFormulario(e: React.FormEvent) {
+  async function submitForm(e: React.FormEvent) {
     e.preventDefault()
     const formData = new FormData()
     Object.entries(formulario).forEach(([k, v]) => v && formData.append(k, v.toString()))
     formData.append('visivel', 'true')
     if (logo) formData.append('logo', logo)
 
-    const url = modoEdicao
-      ? `/api/lojas/${modoEdicao}`
-      : '/api/lojas'
+    const url = modoEdicao ? `/api/lojas/${modoEdicao}` : '/api/lojas'
     const method = modoEdicao ? 'PUT' : 'POST'
 
     try {
@@ -99,25 +97,25 @@ export default function AdminPanel() {
       setLogo(null)
       setLogoPreview(null)
       setModoEdicao(null)
-      carregarLojas()
+      loadStores()
     } catch {
       setMensagem('Erro ao salvar loja.')
     }
   }
 
-  async function toggleVisibilidade(id: number, visivel: boolean) {
+  async function toggleVisibility(id: number, visible: boolean) {
     await fetch(`/api/lojas/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ visivel }),
+      body: JSON.stringify({ visivel: visible }),
     })
-    carregarLojas()
+    loadStores()
   }
 
-  async function excluirLoja(id: number) {
-    if (confirm('Confirmar exclusão?')) {
+  async function deleteStore(id: number) {
+    if (confirm('Tem certeza que deseja excluir esta loja?')) {
       await fetch(`/api/lojas/${id}`, { method: 'DELETE' })
-      carregarLojas()
+      loadStores()
     }
   }
 
@@ -135,20 +133,53 @@ export default function AdminPanel() {
           )}
         </header>
 
-        <div className="bg-white p-6 rounded-xl shadow mb-10">
+        <section className="bg-white p-6 rounded-xl shadow mb-10">
           <h1 className="text-2xl font-bold text-blue-700 mb-4 text-center">
             {modoEdicao ? 'Editar Loja' : 'Cadastrar Nova Loja'}
           </h1>
           {mensagem && <div className="bg-green-100 text-green-800 p-3 rounded mb-4 text-center">{mensagem}</div>}
-
-          <form onSubmit={enviarFormulario} className="grid gap-4 sm:grid-cols-2">
-            {/* ...os inputs conforme seu design original... */}
+          <form onSubmit={submitForm} className="grid gap-4 sm:grid-cols-2">
+            <input type="text" placeholder="Nome" value={formulario.nome || ''} onChange={e => updateField('nome', e.target.value)} className="input" required />
+            <input type="text" placeholder="Descrição" value={formulario.descricao || ''} onChange={e => updateField('descricao', e.target.value)} className="input" required />
+            <input type="text" placeholder="Categoria" value={formulario.categoria || ''} onChange={e => updateField('categoria', e.target.value)} className="input" required />
+            <input type="url" placeholder="Link" value={formulario.link || ''} onChange={e => updateField('link', e.target.value)} className="input" required />
+            <MapaEndereco endereco={formulario.endereco || ''} setEndereco={v => updateField('endereco', v)} />
+            <input type="text" placeholder="Horário" value={formulario.horarioFuncionamento || ''} onChange={e => updateField('horarioFuncionamento', e.target.value)} className="input sm:col-span-2" required />
+            <input type="file" accept="image/*" onChange={e => { const file = e.target.files?.[0]; if (file) { setLogo(file); setLogoPreview(URL.createObjectURL(file)); } }} className="sm:col-span-2" />
+            {logoPreview && <Image src={logoPreview} alt="Preview" width={128} height={128} className="rounded shadow mt-2" />}
+            <input type="text" placeholder="Cliente Nome" value={formulario.clienteNome || ''} onChange={e => updateField('clienteNome', e.target.value)} className="input" required />
+            <input type="email" placeholder="Cliente Email" value={formulario.clienteEmail || ''} onChange={e => updateField('clienteEmail', e.target.value)} className="input" required />
+            {!modoVisual && <input type="password" placeholder="Senha" value={formulario.clienteSenha || ''} onChange={e => updateField('clienteSenha', e.target.value)} className="input sm:col-span-2" required />}
+            <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 sm:col-span-2">{modoEdicao ? 'Atualizar' : 'Cadastrar'}</button>
           </form>
-        </div>
+        </section>
 
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-800 mb-2">Lojas Cadastradas</h2>
-          {/* ...listagem de lojas conforme seu JSX original... */}
+          {lojas.length === 0 ? (
+            <p className="text-gray-500">Nenhuma loja cadastrada.</p>
+          ) : (
+            lojas.map(store => (
+              <div key={store.id} className={`p-4 border rounded-xl shadow-sm ${!store.visivel ? 'bg-red-50' : 'bg-white'}`}>
+                <div className="flex justify-between items-start gap-4">
+                  <div>
+                    <h3 className="font-bold">{store.nome}</h3>
+                    <p className="text-sm text-gray-600">{store.descricao}</p>
+                    <p className="text-xs text-blue-600">{store.link}</p>
+                    {store.endereco && <p className="text-sm text-gray-700 mt-1">📍 {store.endereco}</p>}
+                    {store.horarioFuncionamento && <p className="text-sm text-gray-600 italic">🕒 {store.horarioFuncionamento}</p>}
+                    {!store.visivel && <span className="text-red-500 font-semibold block mt-1">[Oculta]</span>}
+                    {store.imagem && <Image src={`/logos/${store.imagem}`} alt="Logo" width={64} height={64} className="rounded mt-2" />}
+                  </div>
+                  <div className="flex flex-col items-end gap-1 text-sm">
+                    <button onClick={() => startEdit(store)} className="text-yellow-600 hover:underline">Editar</button>
+                    <button onClick={() => toggleVisibility(store.id, !store.visivel)} className="text-blue-600 hover:underline">{store.visivel ? 'Ocultar' : 'Reativar'}</button>
+                    <button onClick={() => deleteStore(store.id)} className="text-red-600 hover:underline">Excluir</button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </section>
       </div>
     </main>
