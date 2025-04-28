@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import MapaEndereco from './MapaEndereco'
+import dynamic from 'next/dynamic'
+const MapaEndereco = dynamic(() => import('./MapaEndereco'), { ssr: false })
+
 
 const modoVisual = process.env.NEXT_PUBLIC_MODO_VISUAL === '1'
 
