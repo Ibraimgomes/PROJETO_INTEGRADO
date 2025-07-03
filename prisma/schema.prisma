@@ -1,34 +1,61 @@
+// ➜ prisma/schema.prisma
+
+// ------------------------
+// Gerador do Prisma Client
 generator client {
   provider = "prisma-client-js"
 }
 
+// ------------------------
+// Fonte de dados (escolha o DB)
+// • Para testes rápidos use "sqlite" (criará um arquivo .db)
+// • Para produção configure "postgresql" ou "mysql"
 datasource db {
-  provider = "mysql"
+  provider = "sqlite" // ou "mysql" | "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  password String
-  role     String
-  lojas    Loja[]
+// ------------------------
+// Models do projeto
+model Profissional {
+  id           String                  @id @default(cuid())
+  email        String                  @unique
+  phone        String
+  category     Categoria
+  layout       Layout
+  translations ProfissionalTraducao[]
+  createdAt    DateTime                @default(now())
 }
 
-model Loja {
-  id         Int     @id @default(autoincrement())
-  nome       String
-  descricao  String
-  categoria  String
-  link       String
-  imagem     String
-  visivel    Boolean @default(true)
-  clienteId  Int
-  cliente    User    @relation(fields: [clienteId], references: [id])
-
-  // ✅ Campos novos
-  endereco   String?
-  horarioFuncionamento String?
+model ProfissionalTraducao {
+  id             String       @id @default(cuid())
+  language       Idioma
+  nome           String
+  descricao      String
+  servicos       String
+  endereco       String
+  profissional   Profissional @relation(fields: [profissionalId], references: [id])
+  profissionalId String
 }
 
+enum Categoria {
+  MEDICINA
+  PSICOLOGIA
+  NUTRICAO
+  EDUCACIONAL
+}
+
+enum Layout {
+  L1
+  L2
+  L3
+}
+
+enum Idioma {
+  PT
+  DE
+  ES
+  SV
+  EN
+
+}
