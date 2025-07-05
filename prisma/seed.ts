@@ -3,22 +3,22 @@ import bcrypt from 'bcryptjs'
 
 async function main() {
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@totalconect.com' },
+    where: { email: 'admin@professionalpage.com' },
     update: {},
     create: {
       name: 'Administrador',
-      email: 'admin@totalconect.com',
+      email: 'admin@professionalpage.com',
       password: await bcrypt.hash('admin123', 10),
       role: 'admin'
     }
   })
 
   const cliente = await prisma.user.upsert({
-    where: { email: 'cliente@totalconect.com' },
+    where: { email: 'cliente@professionalpage.com' },
     update: {},
     create: {
       name: 'Cliente Fiel',
-      email: 'cliente@totalconect.com',
+      email: 'cliente@professionalpage.com',
       password: await bcrypt.hash('cliente123', 10),
       role: 'cliente'
     }

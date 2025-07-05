@@ -32,7 +32,7 @@ export default function Layout3Client({
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-blue-600 text-white p-6 space-y-4">
+      <aside className="w-80 bg-blue-600 text-white p-6 space-y-4">
         <LanguageSwitcher
           idiomas={idiomas}
           ativo={idiomaAtivo}
@@ -49,11 +49,11 @@ export default function Layout3Client({
       </aside>
 
       {/* Conteúdo principal */}
-      <main className="flex-1 p-10 bg-gray-100">
+      <main className="flex-1 p-10 bg-gray-600">
         <h2 className="text-3xl font-semibold mb-6">Serviços</h2>
         <p className="mb-8">{t.servicos}</p>
 
-        <div className="bg-white p-6 rounded shadow">
+        <div className="bg-white p-6 rounded shadow text-black">
           <h3 className="text-xl font-medium mb-2">Endereço</h3>
           <p>{t.endereco}</p>
         </div>

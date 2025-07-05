@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "totalconect",
+      name: "professionalpage",
       script: "npm",
       args: "start",
       env: {

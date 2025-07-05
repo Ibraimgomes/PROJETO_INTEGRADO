@@ -1,0 +1,16 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#6366F1"/>
+  
+  <!-- Profile Icon -->
+  <g transform="translate(4, 4)">
+    <!-- Head -->
+    <circle cx="12" cy="8" r="4" fill="none" stroke="white" stroke-width="1.5"/>
+    <!-- Body -->
+    <path d="M4 20 Q4 16 8 16 L16 16 Q20 16 20 20 L20 22 L4 22 Z" fill="none" stroke="white" stroke-width="1.5"/>
+    <!-- Lines -->
+    <line x1="22" y1="9" x2="26" y2="9" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    <line x1="22" y1="14" x2="25" y2="14" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    <line x1="22" y1="19" x2="25.5" y2="19" stroke="white" stroke-width="1" stroke-linecap="round"/>
+  </g>
+</svg>

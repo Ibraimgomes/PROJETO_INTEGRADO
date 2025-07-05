@@ -18,7 +18,7 @@ export default function LanguageSwitcher({ idiomas, ativo, setAtivo }: Props) {
         <button
           key={lang}
           type="button"
-          className={`px-3 py-1 rounded border ${ativo === lang ? "bg-blue-600 text-white" : "bg-white"}`}
+          className={`px-3 py-1 rounded border ${ativo === lang ? "bg-blue-600 text-white" : "bg-blue"}`}
           onClick={() => setAtivo(lang)}
         >
           {lang}
