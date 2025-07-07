@@ -58,7 +58,6 @@ model Loja {
   cliente    User    @relation(fields: [clienteId], references: [id])
 }
 
-
 enum Categoria {
   MEDICINA
   PSICOLOGIA

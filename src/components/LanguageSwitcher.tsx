@@ -9,7 +9,7 @@ interface Props {
   setAtivo: Dispatch<SetStateAction<Idioma>>;
 }
 
-
+//
 
 export default function LanguageSwitcher({ idiomas, ativo, setAtivo }: Props) {
   return (

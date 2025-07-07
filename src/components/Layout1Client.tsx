@@ -1,4 +1,4 @@
-// src/components/Layout1Client.tsx
+//src/components/Layout1Client.tsx
 "use client";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Idioma } from "@/types/idioma";

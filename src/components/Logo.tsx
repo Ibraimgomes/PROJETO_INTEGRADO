@@ -2,7 +2,7 @@ interface LogoProps {
   className?: string;
   showText?: boolean;
 }
-
+//
 export default function Logo({ 
   className = "", 
   showText = true

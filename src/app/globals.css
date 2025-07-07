@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Configuração base do tema */
+/*Configuração base do tema */
 :root {
   --background: #ffffff;
   --foreground: #1f2937;

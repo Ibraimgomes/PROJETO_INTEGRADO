@@ -13,7 +13,7 @@ export const metadata = {
   description:
     "Plataforma para criação de páginas profissionais multilíngues. Conecte-se com pacientes globalmente nas áreas de medicina, psicologia, nutrição e educação.",
 };
-
+//
 export default function HomePage() {
   const features = [
     {

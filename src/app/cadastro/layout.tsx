@@ -1,4 +1,4 @@
-// src/app/cadastro/layout.tsx
+//src/app/cadastro/layout.tsx
 import { WizardProvider } from "@/components/wizard/WizardProvider";
 
 export const metadata = {

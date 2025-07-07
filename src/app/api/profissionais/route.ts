@@ -1,4 +1,4 @@
-// src/app/api/profissionais/route.ts
+//src/app/api/profissionais/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";

@@ -1,4 +1,4 @@
-// src/app/profissional/[id]/layout1page.tsx
+//src/app/profissional/[id]/layout1page.tsx
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Layout1Client from "@/components/Layout1Client";

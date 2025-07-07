@@ -12,7 +12,7 @@ async function main() {
       role: 'admin'
     }
   })
-
+//
   const cliente = await prisma.user.upsert({
     where: { email: 'cliente@professionalpage.com' },
     update: {},

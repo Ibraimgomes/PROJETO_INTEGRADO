@@ -1,4 +1,4 @@
-// File: src/components/AdminPanel.tsx
+//File: src/components/AdminPanel.tsx
 'use client'
 
 import { useSession, signOut } from 'next-auth/react'

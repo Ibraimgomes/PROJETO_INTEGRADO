@@ -6,7 +6,7 @@ import StepForm from "@/components/wizard/StepForm";
 interface Props {
   params: Promise<{ step: "1" | "2" | "3" }>;
 }
-
+//
 export default async function Page({ params }: Props) {
   const { step } = await params;
   
