@@ -37,6 +37,27 @@ model ProfissionalTraducao {
   profissional   Profissional @relation(fields: [profissionalId], references: [id])
   profissionalId String
 }
+model User {
+  id       String   @id @default(cuid())
+  name     String
+  email    String   @unique
+  password String
+  role     String
+  lojas    Loja[]
+}
+
+model Loja {
+  id         Int     @id @default(autoincrement())
+  nome       String
+  descricao  String
+  categoria  String
+  link       String
+  imagem     String
+  visivel    Boolean
+  clienteId  String
+  cliente    User    @relation(fields: [clienteId], references: [id])
+}
+
 
 enum Categoria {
   MEDICINA
